@@ -1,27 +1,26 @@
-import { View, Text } from "react-native";
+import {View, Text, Image} from 'react-native';
 
-const Timer = ({ hidden }) => {
-    const timer = {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: '5%',
-        height: '10%',
-    }
+const Timer = ({hidden}) => {
+  const timer = {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: '5%',
+    height: '15%',
+  };
 
-    const timerText = {
-        fontSize: 70,
-        fontWeight: '700',
-        textAlign: 'center'
-    }
+  const timerText = {
+    fontSize: 80,
+    fontWeight: '700',
+    textAlign: 'center',
+    color: 'black',
+  };
 
-    return (
+  return (
+    <View style={timer}>
+      {!hidden && <Text style={timerText}>0:00:00</Text>}
+    </View>
+  );
+};
 
-        <View style={timer}>
-            {!hidden && <Text style={timerText}>0:00:00</Text>}
-
-        </View>
-    )
-}
-
-export default Timer
+export default Timer;
