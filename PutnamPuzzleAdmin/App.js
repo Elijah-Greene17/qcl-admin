@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { Node } from 'react';
 import {
   SafeAreaView,
@@ -21,6 +21,7 @@ import {
 
 import MainView from './components/MainView';
 import SafeViewAndroid from "./components/SafeViewAndroid";
+import { AppContext } from './Contexts/AppContext';
 
 import {
   Colors,
@@ -33,11 +34,14 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import A1StartPage from './pages/A1StartPage';
-import A2SelectUsers from './pages/A2SelectUsers';
+import A2SetTimer from './pages/A2SetTimer';
 
 const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
+
+  const [timerIsRunning, setTimerIsRunning] = useState(false)
+  const [timerSetting, setTimer] = useState(0)
 
   const backgroundStyle = {
     backgroundColor: "#FFD2D2",
@@ -53,25 +57,31 @@ const App: () => Node = () => {
   };
 
   return (
-
-    <SafeAreaView style={Platform.OS == 'android' ? SafeViewAndroid.AndroidSafeArea : backgroundStyle}>
-      <StatusBar barStyle={'dark-content'} backgroundColor="#FFD2D2" />
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ animation: 'none' }}>
-          <Stack.Screen
-            name="A1"
-            component={A1StartPage}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="A2"
-            component={A2SelectUsers}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-
-    </SafeAreaView>
+    <AppContext.Provider
+      value={{
+        timerIsRunning,
+        setTimerIsRunning,
+        timerSetting,
+        setTimer
+      }}>
+      <SafeAreaView style={Platform.OS == 'android' ? SafeViewAndroid.AndroidSafeArea : backgroundStyle}>
+        <StatusBar barStyle={'dark-content'} backgroundColor="#FFD2D2" />
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ animation: 'none' }}>
+            <Stack.Screen
+              name="A1"
+              component={A1StartPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="A2"
+              component={A2SetTimer}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </AppContext.Provider>
 
   );
 };

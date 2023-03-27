@@ -1,6 +1,6 @@
-import {View, Text, Image, ProgressViewIOSComponent} from 'react-native';
+import { View, Text, Image, ProgressViewIOSComponent } from 'react-native';
 
-const Header = ({code}) => {
+const Header = ({ code }) => {
   const header = {
     display: 'flex',
     flexDirection: 'row',
