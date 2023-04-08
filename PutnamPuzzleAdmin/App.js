@@ -6,8 +6,8 @@
  * @flow strict-local
  */
 
-import React, { useState } from 'react';
-import type { Node } from 'react';
+import React, {useEffect, useState} from 'react';
+import type {Node} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,12 +16,14 @@ import {
   Text,
   useColorScheme,
   View,
-  Platform
+  Platform,
 } from 'react-native';
 
 import MainView from './components/MainView';
-import SafeViewAndroid from "./components/SafeViewAndroid";
-import { AppContext } from './Contexts/AppContext';
+import SafeViewAndroid from './components/SafeViewAndroid';
+import {AppContext} from './Contexts/AppContext';
+import {initializeApp} from 'firebase/app';
+import {getDatabase, onValue, ref, set} from 'firebase/database';
 
 import {
   Colors,
@@ -31,58 +33,110 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import A1StartPage from './pages/A1StartPage';
 import A2SetTimer from './pages/A2SetTimer';
+import A3QuestPage from './pages/A3QuestPage';
+
+import {firebaseConfig} from './components/firebaseConfig';
+
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyAYWnHYwXqH17hZbXIAT76bFgtN7gNyY7Q',
+//   authDomain: 'quietcornerquests.firebaseapp.com',
+//   databaseURL: 'https://quietcornerquests-default-rtdb.firebaseio.com',
+//   projectId: 'quietcornerquests',
+//   storageBucket: 'quietcornerquests.appspot.com',
+//   messagingSenderId: '170321202795',
+//   appId: '1:170321202795:web:ee95b6d259360368fc6b2e',
+//   measurementId: 'G-0RJ6VZ0546',
+// };
+
+const app = initializeApp(firebaseConfig);
 
 const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
-
-  const [timerIsRunning, setTimerIsRunning] = useState(false)
-  const [timerSetting, setTimer] = useState(0)
+  const [currentAppState, setCurrentAppState] = useState('Inacvitve');
+  const [hintCooldown, setHintCooldown] = useState(0);
+  const [hintStatus, setHintStatus] = useState('Inactive');
+  const [timerEndTime, setTimerEndTime] = useState(0);
+  const [users, setUsers] = useState([]);
+  const [timeToSet, setTimeToSet] = useState(0);
 
   const backgroundStyle = {
-    backgroundColor: "#FFD2D2",
+    backgroundColor: '#FFD2D2',
 
     position: 'absolute',
     width: '100%',
     height: '100%',
     zIndex: 100,
-
-    //flex: 1,
-    // top: Platform.OS === "android" ? (StatusBar.currentHeight : 0,
-    //backgroundColor: Platform.OS === "android" ? 'red' : 'blue'
   };
+
+  useEffect(() => {
+    const db = getDatabase();
+    const dbRef = ref(db, 'app');
+    console.log('EG Test');
+    onValue(dbRef, snapshot => {
+      console.log('test');
+      const data = snapshot.val();
+      console.log('EG Start: ', data);
+      setCurrentAppState(data.currentState);
+      setHintCooldown(data.hint.cooldown);
+      setHintStatus(data.hint.status);
+      setTimerEndTime(data.timer.endTime);
+      setUsers(data.users);
+    });
+  }, []);
 
   return (
     <AppContext.Provider
       value={{
-        timerIsRunning,
-        setTimerIsRunning,
-        timerSetting,
-        setTimer
+        currentAppState,
+        setCurrentAppState,
+        hintCooldown,
+        setHintCooldown,
+        hintStatus,
+        setHintStatus,
+        timerEndTime,
+        setTimerEndTime,
+        users,
+        setUsers,
+        timeToSet,
+        setTimeToSet,
       }}>
-      <SafeAreaView style={Platform.OS == 'android' ? SafeViewAndroid.AndroidSafeArea : backgroundStyle}>
+      <SafeAreaView
+        style={
+          Platform.OS == 'android'
+            ? SafeViewAndroid.AndroidSafeArea
+            : backgroundStyle
+        }>
         <StatusBar barStyle={'dark-content'} backgroundColor="#FFD2D2" />
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ animation: 'none' }}>
+        {/* <NavigationContainer>
+          <Stack.Navigator screenOptions={{animation: 'none'}}>
             <Stack.Screen
               name="A1"
               component={A1StartPage}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="A2"
               component={A2SetTimer}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="A3"
+              component={A3QuestPage}
+              options={{headerShown: false}}
             />
           </Stack.Navigator>
-        </NavigationContainer>
+        </NavigationContainer> */}
+        {currentAppState == 'Inactive' && <A1StartPage />}
+        {currentAppState == 'Set Timer' && <A2SetTimer />}
+        {currentAppState == 'Active In Progress' && <A3QuestPage />}
+        {currentAppState == 'Active Game Over' && 'error'}
       </SafeAreaView>
     </AppContext.Provider>
-
   );
 };
 
