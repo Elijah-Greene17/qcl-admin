@@ -58,11 +58,12 @@ const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
   const [currentAppState, setCurrentAppState] = useState('Inacvitve');
+  const [hintName, setHintName] = useState('Error')
   const [hintCooldown, setHintCooldown] = useState(0);
   const [hintStatus, setHintStatus] = useState('Inactive');
   const [timerEndTime, setTimerEndTime] = useState(0);
   const [users, setUsers] = useState([]);
-  const [timeToSet, setTimeToSet] = useState(0);
+  const [timeToSet, setTimeToSet] = useState(7200000);
 
   const backgroundStyle = {
     backgroundColor: '#FFD2D2',
@@ -76,14 +77,12 @@ const App: () => Node = () => {
   useEffect(() => {
     const db = getDatabase();
     const dbRef = ref(db, 'app');
-    console.log('EG Test');
     onValue(dbRef, snapshot => {
-      console.log('test');
       const data = snapshot.val();
-      console.log('EG Start: ', data);
       setCurrentAppState(data.currentState);
       setHintCooldown(data.hint.cooldown);
       setHintStatus(data.hint.status);
+      setHintName(data.hint.by);
       setTimerEndTime(data.timer.endTime);
       setUsers(data.users);
     });
@@ -94,6 +93,8 @@ const App: () => Node = () => {
       value={{
         currentAppState,
         setCurrentAppState,
+        hintName,
+        setHintName,
         hintCooldown,
         setHintCooldown,
         hintStatus,

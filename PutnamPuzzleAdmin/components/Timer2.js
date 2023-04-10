@@ -20,7 +20,6 @@ const Timer2 = ({isRunning, time}) => {
       setCurrentTime(prevTime => prevTime - 1000);
 
       let timeClone = currentTime;
-      console.log(timeClone);
       const h = Math.floor(timeClone / 3600000);
       timeClone = timeClone % 3600000;
       const m = Math.floor(timeClone / 60000);
@@ -48,33 +47,18 @@ const Timer2 = ({isRunning, time}) => {
   // Handle Starting and Pausing the Timer
   useEffect(() => {
     if (isRunning) {
-      console.log('Starting Timer');
+      //console.log('Starting Timer');
     } else {
-      console.log('Timer is Paused');
+      //console.log('Timer is Paused');
     }
   }, [isRunning]);
 
   // Handle Setting the Timer
   useEffect(() => {
-    console.log(time);
     if (time > 0) {
       setCurrentTime(time);
     }
   }, [time]);
-
-  // Update the UI reflecting the current time
-  //   useEffect(() => {
-  //     let timeClone = currentTime;
-  //     console.log(timeClone);
-  //     const h = Math.floor(timeClone / 3600000);
-  //     timeClone = currentTime % 3600000;
-  //     const m = Math.floor(timeClone / 60000);
-  //     timeClone = currentTime % 60000;
-  //     const s = Math.floor(timeClone / 1000);
-  //     setHourDisplay(h);
-  //     setMinuteDisplay(m);
-  //     setSecondDisplay(s);
-  //   }, [currentTime]);
 
   const timer = {
     display: 'flex',

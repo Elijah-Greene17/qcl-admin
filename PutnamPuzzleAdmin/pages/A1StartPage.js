@@ -75,13 +75,12 @@ const A1StartPage = ({navigation, route}) => {
       <View style={timeControlStyle}>
         <Pressable
           onPress={() => {
-            console.log('Pressed');
             const app = initializeApp(firebaseConfig);
             const db = getDatabase();
             set(ref(db, 'app/currentState'), 'Set Timer');
           }}
           style={setTimeStyle}>
-          <Text style={setTimeTextStyle}>SetTime</Text>
+          <Text style={setTimeTextStyle}>Set Time</Text>
         </Pressable>
       </View>
       <Lobby onSelect={setPlayers} users={users} />
@@ -89,29 +88,28 @@ const A1StartPage = ({navigation, route}) => {
         title={'Start Quest'}
         onClick={() => {
           // Set Timer end time in database
-          // const app = initializeApp(firebaseConfig);
-          // const db = getDatabase();
-          // const now = Date.now();
-          // const later = now + parseInt(timeToSet);
-          // const laterDbObj = {
-          //   endTime: later,
-          // };
-          // set(ref(db, 'app/timer'), laterDbObj);
+          const app = initializeApp(firebaseConfig);
+          const db = getDatabase();
+          const now = Date.now();
+          const later = now + timeToSet;
+          const laterDbObj = {
+            endTime: later,
+          };
+          set(ref(db, 'app/timer'), laterDbObj);
 
           // Update users in database
           const usersDbObj = {};
           for (const [key, value] of Object.entries(approvedPlayers)) {
             usersDbObj[key] = {
-              Name: value.id.name,
-              id: value.id.id,
-              Phone: value.id.phone,
+              Name: value.Name,
+              id: value.id,
+              Phone: value.Phone,
             };
           }
-          console.log(usersDbObj);
-          // set(ref(db, 'app/users'), usersDbObj);
+          set(ref(db, 'app/users'), usersDbObj);
 
           // Set current state in database
-          // set(ref(db, 'app/currentState'), 'Active In Progress');
+          set(ref(db, 'app/currentState'), 'Active In Progress');
         }}
       />
     </MainView>

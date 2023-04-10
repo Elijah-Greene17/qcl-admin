@@ -29,7 +29,6 @@ const Lobby = ({onSelect, users}) => {
   };
 
   useEffect(() => {
-    console.log('Selected Players: ', selectedPlayers);
   }, [selectedPlayers]);
 
   return (
