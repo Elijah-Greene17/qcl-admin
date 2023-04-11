@@ -15,7 +15,7 @@ import {initializeApp} from 'firebase/app';
 import {getDatabase, onValue, ref, set} from 'firebase/database';
 
 const A3QuestPage = ({navigation}) => {
-const [time, setTime] = useState(0)
+  const [time, setTime] = useState(0);
 
   const {
     currentAppState,
@@ -44,41 +44,60 @@ const [time, setTime] = useState(0)
     fontWeight: 'bold',
   };
 
-  useEffect(()=>{
-    console.log("timerEndTime: ", timerEndTime)
-    let now = Date.now();
-    const duration = timerEndTime-now;
-    setTime(duration)
+  const updateTimer = t => {
+    console.log('Updating Timer');
 
-    // let interval = setInterval(() => {
-    //   if (time - 1000 >= 0) {
-    //     setTime(prevTime => prevTime - 1000);
-    //   }
-    // }, 1000);
+    if (t) {
+      console.log('t exists: ' + t);
+      setTime(t);
+    }
 
-    // return () => clearInterval(interval);
+    if (t > 0) {
+      setTimeout(() => updateTimer(t - 1000), 1000);
+    }
+  };
 
-  }, [timerEndTime])
+  useEffect(() => {
+    console.log('Test');
+  });
 
- 
+  useEffect(() => {
+    // Calculate Time Remaining
+    console.log('Running Use Effect');
+    const currentTime = Date.now();
+    const timeRemaining = timerEndTime - currentTime;
+    console.log('Time Remaining: ' + timeRemaining);
+    setTime(timeRemaining);
+    setTimeout(() => {
+      updateTimer(timeRemaining);
+    }, 1000);
+  }, [timerEndTime]);
 
   return (
     <MainView style={backgroundStyle}>
       <Timer isRunning={true} startTime={time} />
-      <Lobby onSelect={()=>{console.log("none")}} users={users} />
-      {hintStatus == "Active" && <Text style={hintStyle}>{hintName} Has Requested a Hint</Text>}
-      {hintStatus == "Active" && <SubButton
-        title={'Clear'}
-        onClick={() => {
-          // Connect to the database
-          const app = initializeApp(firebaseConfig);
-          const db = getDatabase();
-
-          // Set hint status to inactive
-          set(ref(db, 'app/hint/status'), 'Inactive');
+      <Lobby
+        onSelect={() => {
+          console.log('none');
         }}
+        users={users}
       />
-}
+      {hintStatus == 'Active' && (
+        <Text style={hintStyle}>{hintName} Has Requested a Hint</Text>
+      )}
+      {hintStatus == 'Active' && (
+        <SubButton
+          title={'Clear'}
+          onClick={() => {
+            // Connect to the database
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase();
+
+            // Set hint status to inactive
+            set(ref(db, 'app/hint/status'), 'Inactive');
+          }}
+        />
+      )}
       <Button
         title={'End Quest'}
         onClick={() => {

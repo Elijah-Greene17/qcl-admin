@@ -6,7 +6,6 @@ import {firebaseConfig} from '../components/firebaseConfig';
 import {initializeApp} from 'firebase/app';
 import {getDatabase, onValue, ref, set} from 'firebase/database';
 
-
 const Timer = ({isRunning, startTime}) => {
   const [time, setTime] = useState(startTime);
 
@@ -41,15 +40,15 @@ const Timer = ({isRunning, startTime}) => {
 
   return (
     <View style={styles.timer}>
-      {time <= 0 
-        ? 
-        <Text style={styles.timerDoneText}>0:00:00</Text> 
-        : 
+      {startTime <= 0 ? (
+        <Text style={styles.timerDoneText}>0:00:00</Text>
+      ) : (
         <Text style={styles.timerText}>
-          {hourDisplay}:{minuteDisplay < 10 ? `0${minuteDisplay}` : minuteDisplay}
-          :{secondDisplay < 10 ? `0${secondDisplay}`:secondDisplay}
+          {hourDisplay}:
+          {minuteDisplay < 10 ? `0${minuteDisplay}` : minuteDisplay}:
+          {secondDisplay < 10 ? `0${secondDisplay}` : secondDisplay}
         </Text>
-      }
+      )}
     </View>
   );
 };
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     color: 'red',
-  }
+  },
 });
 
 export default Timer;
