@@ -16,6 +16,7 @@ import {getDatabase, onValue, ref, set} from 'firebase/database';
 
 const A3QuestPage = ({navigation}) => {
   const [time, setTime] = useState(0);
+  const [completed, setCompleted] = useState(false);
 
   const {
     currentAppState,
@@ -29,6 +30,8 @@ const A3QuestPage = ({navigation}) => {
     setTimerEndTime,
     users,
     setUsers,
+    code,
+    userCode,
   } = useContext(AppContext);
 
   const backgroundStyle = {
@@ -44,33 +47,30 @@ const A3QuestPage = ({navigation}) => {
     fontWeight: 'bold',
   };
 
-  const updateTimer = t => {
-    console.log('Updating Timer');
-
-    if (t) {
-      console.log('t exists: ' + t);
-      setTime(t);
-    }
-
-    if (t > 0) {
-      setTimeout(() => updateTimer(t - 1000), 1000);
-    }
-  };
-
   useEffect(() => {
-    console.log('Test');
-  });
+    if (userCode != '' && userCode === code) {
+      console.log('The Quest was completed by the Team!');
+      setCompleted(true);
+    }
+  }, [userCode]);
 
   useEffect(() => {
     // Calculate Time Remaining
-    console.log('Running Use Effect');
     const currentTime = Date.now();
-    const timeRemaining = timerEndTime - currentTime;
-    console.log('Time Remaining: ' + timeRemaining);
+    let timeRemaining = timerEndTime - currentTime;
     setTime(timeRemaining);
-    setTimeout(() => {
-      updateTimer(timeRemaining);
+
+    // count down timer
+    const timer = setInterval(() => {
+      console.log(timeRemaining);
+      if (timeRemaining > 0) {
+        timeRemaining -= 1000;
+        setTime(timeRemaining);
+      } else {
+        clearInterval(timer);
+      }
     }, 1000);
+    return () => clearInterval(timer);
   }, [timerEndTime]);
 
   return (
@@ -82,6 +82,9 @@ const A3QuestPage = ({navigation}) => {
         }}
         users={users}
       />
+      {code == userCode && (
+        <Text style={hintStyle}>The Quest was completed by the Team!</Text>
+      )}
       {hintStatus == 'Active' && (
         <Text style={hintStyle}>{hintName} Has Requested a Hint</Text>
       )}
@@ -101,7 +104,13 @@ const A3QuestPage = ({navigation}) => {
       <Button
         title={'End Quest'}
         onClick={() => {
-          setTimerIsRunning(!timerIsRunning);
+          // Connect to the database
+          const app = initializeApp(firebaseConfig);
+          const db = getDatabase();
+          set(ref(db, 'app/currentState'), 'Inactive');
+
+          // Clear users from database
+          set(ref(db, 'app/users'), {});
         }}
       />
     </MainView>

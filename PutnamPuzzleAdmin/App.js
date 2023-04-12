@@ -58,7 +58,9 @@ const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
   const [currentAppState, setCurrentAppState] = useState('Inacvitve');
-  const [hintName, setHintName] = useState('Error')
+  const [code, setCode] = useState('');
+  const [userCode, setUserCode] = useState('');
+  const [hintName, setHintName] = useState('Error');
   const [hintCooldown, setHintCooldown] = useState(0);
   const [hintStatus, setHintStatus] = useState('Inactive');
   const [timerEndTime, setTimerEndTime] = useState(0);
@@ -81,6 +83,8 @@ const App: () => Node = () => {
       const data = snapshot.val();
       setCurrentAppState(data.currentState);
       setHintCooldown(data.hint.cooldown);
+      setCode(data.code.value);
+      setUserCode(data.code.userEntered);
       setHintStatus(data.hint.status);
       setHintName(data.hint.by);
       setTimerEndTime(data.timer.endTime);
@@ -93,6 +97,10 @@ const App: () => Node = () => {
       value={{
         currentAppState,
         setCurrentAppState,
+        code,
+        setCode,
+        userCode,
+        setUserCode,
         hintName,
         setHintName,
         hintCooldown,

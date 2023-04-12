@@ -101,7 +101,11 @@ const A2SetTimer = ({navigation}) => {
       <Button onClick={handleSetDuration} title={'Set Quest Duration'} />
       <Button
         onClick={() => {
-          navigation.navigate('A1');
+          // navigation.navigate('A1');
+          // set app state to inactive
+          const app = initializeApp(firebaseConfig);
+          const db = getDatabase();
+          set(ref(db, 'app/currentState'), 'Inactive');
         }}
         title={'Cancel'}
       />
