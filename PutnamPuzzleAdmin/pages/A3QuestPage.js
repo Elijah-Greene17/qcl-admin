@@ -48,9 +48,16 @@ const A3QuestPage = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (userCode != '' && userCode === code) {
+    console.log("test")
+    console.log(userCode)
+    console.log(code)
+    if (userCode != '' && userCode == code) {
       console.log('The Quest was completed by the Team!');
       setCompleted(true);
+      // Connect to the database
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase();
+      set(ref(db, 'app/timer/endTime'), -1);
     }
   }, [userCode]);
 
@@ -108,6 +115,12 @@ const A3QuestPage = ({navigation}) => {
           const app = initializeApp(firebaseConfig);
           const db = getDatabase();
           set(ref(db, 'app/currentState'), 'Inactive');
+          set(ref(db, 'app/timer/endTime'), -1);
+          set(ref(db, 'app/code/userEntered'), '');
+          set(ref(db, 'app/hint/status'), 'Inactive');
+          set(ref(db, 'app/hint/by'), '');
+          set(ref(db, 'app/hint/cooldown'), 0);
+          set(ref(db, 'app/userIndex'), 0);
 
           // Clear users from database
           set(ref(db, 'app/users'), {});

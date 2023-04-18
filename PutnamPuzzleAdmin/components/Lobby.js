@@ -29,12 +29,13 @@ const Lobby = ({onSelect, users}) => {
   };
 
   useEffect(() => {
-  }, [selectedPlayers]);
+    //console.log("users", users)
+  }, []);
 
   return (
     <View style={lobbyStyle}>
       <ScrollView>
-        {users &&
+        {users && 
           users.map(user => (
             <Quester
               key={user.id}

@@ -88,7 +88,11 @@ const App: () => Node = () => {
       setHintStatus(data.hint.status);
       setHintName(data.hint.by);
       setTimerEndTime(data.timer.endTime);
-      setUsers(data.users);
+      let usersArray = []
+      for (let user in data.users) {
+        usersArray.push(data.users[user])
+      }
+      setUsers(usersArray);
     });
   }, []);
 
