@@ -82,7 +82,12 @@ const A3QuestPage = ({navigation}) => {
 
   return (
     <MainView style={backgroundStyle}>
+      {code == userCode ? (
+        <Timer isRunning={false} startTime={0} />
+      ) :
       <Timer isRunning={true} startTime={time} />
+      }
+      
       <Lobby
         onSelect={() => {
           console.log('none');
