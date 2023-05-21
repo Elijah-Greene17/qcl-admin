@@ -1,0 +1,26 @@
+[debug] [2023-04-19T20:30:23.604Z] ----------------------------------------------------------------------
+[debug] [2023-04-19T20:30:23.605Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\egree\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2023-04-19T20:30:23.606Z] CLI Version:   11.28.0
+[debug] [2023-04-19T20:30:23.606Z] Platform:      win32
+[debug] [2023-04-19T20:30:23.606Z] Node Version:  v18.12.1
+[debug] [2023-04-19T20:30:23.607Z] Time:          Wed Apr 19 2023 16:30:23 GMT-0400 (Eastern Daylight Time)
+[debug] [2023-04-19T20:30:23.607Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-19T20:30:23.668Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-19T20:30:23.668Z] > authorizing via signed-in user (egreene017@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Workspace\qcl-admin\PutnamPuzzleAdmin
+
+Before we get started, keep in mind:
+
+  * You are currently outside your home directory
+  * You are initializing within an existing Firebase project directory
+

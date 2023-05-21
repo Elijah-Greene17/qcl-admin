@@ -72,7 +72,7 @@ const A3QuestPage = ({navigation}) => {
       // Connect to the database
       const app = initializeApp(firebaseConfig);
       const db = getDatabase();
-      set(ref(db, 'app/timer/endTime'), -1);
+      //set(ref(db, 'app/timer/endTime'), -1);
     }
   }, [userCode]);
 
@@ -85,7 +85,7 @@ const A3QuestPage = ({navigation}) => {
     // count down timer
     const timer = setInterval(() => {
       console.log(timeRemaining);
-      if (timeRemaining > 0) {
+      if (timeRemaining > 0 && !completed) {
         timeRemaining = timerEndTime - Date.now();
         setTime(timeRemaining);
       } else {
@@ -93,15 +93,11 @@ const A3QuestPage = ({navigation}) => {
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [timerEndTime]);
+  }, [timerEndTime, completed]);
 
   return (
     <MainView style={backgroundStyle}>
-      {code == userCode ? (
-        <Timer isRunning={false} startTime={0} />
-      ) : (
-        <Timer isRunning={true} startTime={time} />
-      )}
+      <Timer isRunning={true} startTime={time} />
 
       <Lobby
         onSelect={() => {
@@ -142,7 +138,7 @@ const A3QuestPage = ({navigation}) => {
       {confirm && (
         <View>
           <Spacer height={'5%'} />
-          <Text style={hintStyle}>Are you sure you want a hint?</Text>
+          <Text style={hintStyle}>Are you sure you want to end the quest?</Text>
           <View style={confirmStyle}>
             <SubButton
               title={'Yes'}

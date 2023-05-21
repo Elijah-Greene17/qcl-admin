@@ -5,13 +5,13 @@ const SubButton = ({title, onClick}) => {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    height: '5%',
+    height: 40,
     marginTop: '3%',
   };
 
   const buttonBorder = {
     backgroundColor: 'black',
-    width: '20%',
+    width: 80,
     borderRadius: 2,
     padding: 5,
   };
