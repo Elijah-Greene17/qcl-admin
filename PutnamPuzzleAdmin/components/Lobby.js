@@ -4,9 +4,9 @@ import Button from './Button';
 import CustomCheckbox from './CustomCheckbox';
 import Header from './Header';
 import Timer from './Timer';
-
+import {firebaseConfig} from '../components/firebaseConfig';
 import {initializeApp} from 'firebase/app';
-import {getDatabase, onValue, ref} from 'firebase/database';
+import {getDatabase, onValue, ref, set} from 'firebase/database';
 
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyAYWnHYwXqH17hZbXIAT76bFgtN7gNyY7Q',
@@ -35,7 +35,7 @@ const Lobby = ({onSelect, users}) => {
   return (
     <View style={lobbyStyle}>
       <ScrollView>
-        {users && 
+        {users &&
           users.map(user => (
             <Quester
               key={user.id}
@@ -55,13 +55,20 @@ const Lobby = ({onSelect, users}) => {
                 };
                 setSelectedPlayers(clone);
                 onSelect(clone);
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase();
+                set(ref(db, `app/users/${user.id}/selected`), true);
               }}
               onUncheck={() => {
                 const clone = {...selectedPlayers};
                 delete clone[user.id];
                 setSelectedPlayers(clone);
                 onSelect(clone);
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase();
+                set(ref(db, `app/users/${user.id}/selected`), false);
               }}
+              selected={user.selected}
             />
           ))}
       </ScrollView>
@@ -69,7 +76,7 @@ const Lobby = ({onSelect, users}) => {
   );
 };
 
-const Quester = ({name, number, onCheck, onUncheck}) => {
+const Quester = ({name, number, onCheck, onUncheck, selected}) => {
   const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
@@ -106,6 +113,7 @@ const Quester = ({name, number, onCheck, onUncheck}) => {
           handleUncheck={() => {
             setIsSelected(false);
           }}
+          checked={selected}
         />
       </View>
     </View>

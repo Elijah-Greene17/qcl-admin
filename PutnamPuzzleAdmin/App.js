@@ -35,6 +35,7 @@ import {
 
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import A0HomePage from './pages/A0HomePage';
 import A1StartPage from './pages/A1StartPage';
 import A2SetTimer from './pages/A2SetTimer';
 import A3QuestPage from './pages/A3QuestPage';
@@ -65,11 +66,10 @@ const App: () => Node = () => {
   const [hintStatus, setHintStatus] = useState('Inactive');
   const [timerEndTime, setTimerEndTime] = useState(0);
   const [users, setUsers] = useState([]);
-  const [timeToSet, setTimeToSet] = useState(7200000);
+  const [timeToSet, setTimeToSet] = useState(0);
 
   const backgroundStyle = {
     backgroundColor: '#FFD2D2',
-
     position: 'absolute',
     width: '100%',
     height: '100%',
@@ -88,13 +88,27 @@ const App: () => Node = () => {
       setHintStatus(data.hint.status);
       setHintName(data.hint.by);
       setTimerEndTime(data.timer.endTime);
-      let usersArray = []
+      let usersArray = [];
       for (let user in data.users) {
-        usersArray.push(data.users[user])
+        usersArray.push(data.users[user]);
       }
       setUsers(usersArray);
     });
+    // if (Platform.OS === 'android') {
+    //   requestUserPermission();
+    // }
   }, []);
+
+  // async function requestUserPermission() {
+  //   const authStatus = await messaging().requestPermission();
+  //   const enabled =
+  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  //   if (enabled) {
+  //     console.log('Authorization status:', authStatus);
+  //   }
+  // }
 
   return (
     <AppContext.Provider
@@ -144,6 +158,7 @@ const App: () => Node = () => {
             />
           </Stack.Navigator>
         </NavigationContainer> */}
+        {currentAppState == 'Uninitiated' && <A0HomePage />}
         {currentAppState == 'Inactive' && <A1StartPage />}
         {currentAppState == 'Set Timer' && <A2SetTimer />}
         {currentAppState == 'Active In Progress' && <A3QuestPage />}

@@ -1,4 +1,4 @@
-import {View, Text, Image, Pressable, TextInput} from 'react-native';
+import {View, Text, Image, Pressable, TextInput, AppState} from 'react-native';
 import Button from '../components/Button';
 import SubButton from '../components/SubButton';
 
@@ -17,6 +17,7 @@ import {getDatabase, onValue, ref, set} from 'firebase/database';
 const A3QuestPage = ({navigation}) => {
   const [time, setTime] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [confirm, setConfirm] = useState(false);
 
   const {
     currentAppState,
@@ -47,10 +48,24 @@ const A3QuestPage = ({navigation}) => {
     fontWeight: 'bold',
   };
 
+  const confirmStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: '5%',
+  };
+
+  // useEffect(() => {
+  //   console.log('App State Listener Activated');
+  //   const currentTime = Date.now();
+  //   let timeRemaining = timerEndTime - currentTime;
+  //   setTime(timeRemaining);
+  // }, [AppState.currentState]);
+
   useEffect(() => {
-    console.log("test")
-    console.log(userCode)
-    console.log(code)
+    console.log('test');
+    console.log(userCode);
+    console.log(code);
     if (userCode != '' && userCode == code) {
       console.log('The Quest was completed by the Team!');
       setCompleted(true);
@@ -71,7 +86,7 @@ const A3QuestPage = ({navigation}) => {
     const timer = setInterval(() => {
       console.log(timeRemaining);
       if (timeRemaining > 0) {
-        timeRemaining -= 1000;
+        timeRemaining = timerEndTime - Date.now();
         setTime(timeRemaining);
       } else {
         clearInterval(timer);
@@ -84,10 +99,10 @@ const A3QuestPage = ({navigation}) => {
     <MainView style={backgroundStyle}>
       {code == userCode ? (
         <Timer isRunning={false} startTime={0} />
-      ) :
-      <Timer isRunning={true} startTime={time} />
-      }
-      
+      ) : (
+        <Timer isRunning={true} startTime={time} />
+      )}
+
       <Lobby
         onSelect={() => {
           console.log('none');
@@ -110,27 +125,54 @@ const A3QuestPage = ({navigation}) => {
 
             // Set hint status to inactive
             set(ref(db, 'app/hint/status'), 'Inactive');
+            set(ref(db, 'app/hint/cooldown'), Date.now() + 8 * 60 * 1000);
           }}
         />
       )}
-      <Button
-        title={'End Quest'}
-        onClick={() => {
-          // Connect to the database
-          const app = initializeApp(firebaseConfig);
-          const db = getDatabase();
-          set(ref(db, 'app/currentState'), 'Inactive');
-          set(ref(db, 'app/timer/endTime'), -1);
-          set(ref(db, 'app/code/userEntered'), '');
-          set(ref(db, 'app/hint/status'), 'Inactive');
-          set(ref(db, 'app/hint/by'), '');
-          set(ref(db, 'app/hint/cooldown'), 0);
-          set(ref(db, 'app/userIndex'), 0);
 
-          // Clear users from database
-          set(ref(db, 'app/users'), {});
-        }}
-      />
+      {!confirm && (
+        <Button
+          title={'End Quest'}
+          onClick={() => {
+            setConfirm(true);
+          }}
+        />
+      )}
+
+      {confirm && (
+        <View>
+          <Spacer height={'5%'} />
+          <Text style={hintStyle}>Are you sure you want a hint?</Text>
+          <View style={confirmStyle}>
+            <SubButton
+              title={'Yes'}
+              onClick={() => {
+                // Connect to the database
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase();
+                set(ref(db, 'app/currentState'), 'Uninitiated');
+                set(ref(db, 'app/timer/endTime'), -1);
+                set(ref(db, 'app/code/userEntered'), '');
+                set(ref(db, 'app/hint/status'), 'Inactive');
+                set(ref(db, 'app/hint/by'), '');
+                set(ref(db, 'app/hint/cooldown'), 0);
+                set(ref(db, 'app/userIndex'), 0);
+
+                // Clear users from database
+                set(ref(db, 'app/users'), {});
+                setConfirm(false);
+              }}
+            />
+            <View style={{width: '10%'}} />
+            <SubButton
+              title={'No'}
+              onClick={() => {
+                setConfirm(false);
+              }}
+            />
+          </View>
+        </View>
+      )}
     </MainView>
   );
 };

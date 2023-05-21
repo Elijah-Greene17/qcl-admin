@@ -80,7 +80,7 @@ const A1StartPage = ({navigation, route}) => {
             set(ref(db, 'app/currentState'), 'Set Timer');
           }}
           style={setTimeStyle}>
-          <Text style={setTimeTextStyle}>Set Time</Text>
+          <Text style={setTimeTextStyle}>Set Quest Duration</Text>
         </Pressable>
       </View>
       <Lobby onSelect={setPlayers} users={users} />
@@ -104,6 +104,7 @@ const A1StartPage = ({navigation, route}) => {
               Name: value.Name,
               id: value.id,
               Phone: value.Phone,
+              selected: true,
             };
           }
           set(ref(db, 'app/users'), usersDbObj);

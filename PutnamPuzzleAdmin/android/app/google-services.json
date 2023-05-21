@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "979579003504",
+    "project_id": "quietcorneradmin",
+    "storage_bucket": "quietcorneradmin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979579003504:android:9ce93b000b0e3e397bcab5",
+        "android_client_info": {
+          "package_name": "com.putnampuzzleadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "979579003504-dqa8ln5hd7h2h5d3f6jh4cqb8hkntc0d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-vwx9bIlBwpXV2fKzwcyuP1ydoj4t_hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "979579003504-dqa8ln5hd7h2h5d3f6jh4cqb8hkntc0d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

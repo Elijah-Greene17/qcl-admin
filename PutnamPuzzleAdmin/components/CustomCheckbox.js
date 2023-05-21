@@ -1,16 +1,16 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {useEffect, useState} from 'react';
 
-const CustomCheckbox = ({ handleCheck, handleUncheck }) => {
-  const [isChecked, setIsChecked] = useState(false);
+const CustomCheckbox = ({handleCheck, handleUncheck, checked}) => {
+  const [isChecked, setIsChecked] = useState(checked);
 
   useEffect(() => {
     if (isChecked) {
-      handleCheck()
+      handleCheck();
     } else {
-      handleUncheck()
+      handleUncheck();
     }
-  }, [isChecked])
+  }, [isChecked]);
 
   return (
     <TouchableOpacity onPress={() => setIsChecked(!isChecked)}>

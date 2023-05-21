@@ -12,7 +12,7 @@ import {initializeApp} from 'firebase/app';
 import {getDatabase, onValue, ref, set} from 'firebase/database';
 
 const A2SetTimer = ({navigation}) => {
-  const [hours, setHours] = useState('2');
+  const [hours, setHours] = useState('0');
   const [minutes, setMinutes] = useState('00');
   const [seconds, setSeconds] = useState('00');
 
@@ -62,11 +62,12 @@ const A2SetTimer = ({navigation}) => {
   return (
     // Header: 25%; Timer: 15%, Button: 20%
     <MainView style={backgroundStyle}>
-      <Spacer height="20%" />
+      <Spacer height="5%" />
       <View style={inputSectionStyle}>
         <TextInput
           style={textInputStyle}
           value={hours}
+          keyboardType="number-pad"
           onFocus={() => {
             setHours('');
           }}
@@ -78,6 +79,7 @@ const A2SetTimer = ({navigation}) => {
         <TextInput
           style={textInputStyle}
           value={minutes}
+          keyboardType="number-pad"
           onFocus={() => {
             setMinutes('');
           }}
@@ -89,6 +91,7 @@ const A2SetTimer = ({navigation}) => {
         <TextInput
           style={textInputStyle}
           value={seconds}
+          keyboardType="number-pad"
           onFocus={() => {
             setSeconds('');
           }}
@@ -97,7 +100,7 @@ const A2SetTimer = ({navigation}) => {
           }}
         />
       </View>
-      <Spacer height="10%" />
+      <Spacer height="5%" />
       <Button onClick={handleSetDuration} title={'Set Quest Duration'} />
       <Button
         onClick={() => {
