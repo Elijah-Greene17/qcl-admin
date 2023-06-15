@@ -160,7 +160,7 @@ const A3QuestPage = ({navigation}) => {
 
                 // Add users to firestore
                 users.forEach(user => {
-                  fetch('http://localhost:3000/api/create', {
+                  fetch('http://192.168.1.2:3000/api/create', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',

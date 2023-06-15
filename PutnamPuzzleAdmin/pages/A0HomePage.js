@@ -59,7 +59,7 @@ const A0HomePage = ({navigation, route}) => {
           const db = getDatabase();
           set(ref(db, 'app/currentState'), 'Inactive');
 
-          fetch('http://localhost:3000/api/read', {
+          fetch('http://192.168.1.2:3000/api/read', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
