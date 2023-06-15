@@ -27,6 +27,7 @@ import {CurrentRenderContext} from '@react-navigation/native';
 
 const A0HomePage = ({navigation, route}) => {
   const {
+    setQuestNo,
     currentAppState,
     setCurrentAppState,
     hintCooldown,
@@ -56,8 +57,50 @@ const A0HomePage = ({navigation, route}) => {
           // Set current state in database
           const app = initializeApp(firebaseConfig);
           const db = getDatabase();
-
           set(ref(db, 'app/currentState'), 'Inactive');
+
+          fetch('http://localhost:3000/api/read', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              let id = -1;
+              data.forEach(element => {
+                console.log('element.QuestID: ' + element.QuestID);
+                if (element.QuestID && parseInt(element.QuestID) > id) {
+                  id = parseInt(element.QuestID);
+                }
+              });
+              id++;
+              if (id / 1000 > 1) {
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase();
+                set(ref(db, 'app/questId'), id);
+                console.log(id);
+              } else if (id / 100 > 1) {
+                // setQuestNo('0' + id);
+                // console.log('0' + id);
+                // connect to db
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase();
+                set(ref(db, 'app/questId'), '0' + id);
+                console.log('0' + id);
+              } else if (id / 10 > 1) {
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase();
+                set(ref(db, 'app/questId'), '00' + id);
+                console.log('00' + id);
+              } else {
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase();
+                set(ref(db, 'app/questId'), '000' + id);
+                console.log('000' + id);
+              }
+            });
         }}
       />
     </MainView>

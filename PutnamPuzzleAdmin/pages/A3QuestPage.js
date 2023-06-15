@@ -20,6 +20,7 @@ const A3QuestPage = ({navigation}) => {
   const [confirm, setConfirm] = useState(false);
 
   const {
+    questNo,
     currentAppState,
     setCurrentAppState,
     hintCooldown,
@@ -146,6 +147,7 @@ const A3QuestPage = ({navigation}) => {
                 // Connect to the database
                 const app = initializeApp(firebaseConfig);
                 const db = getDatabase();
+                set(ref(db, 'app/questId'), '');
                 set(ref(db, 'app/currentState'), 'Uninitiated');
                 set(ref(db, 'app/timer/endTime'), -1);
                 set(ref(db, 'app/code/userEntered'), '');
@@ -154,7 +156,28 @@ const A3QuestPage = ({navigation}) => {
                 set(ref(db, 'app/hint/cooldown'), 0);
                 set(ref(db, 'app/userIndex'), 0);
 
-                // Clear users from database
+                console.log('Time is: ' + time);
+
+                // Add users to firestore
+                users.forEach(user => {
+                  fetch('http://localhost:3000/api/create', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      completion: time > 0 && completed ? time : 'DNF',
+                      name: user.Name,
+                      id: questNo,
+                    }),
+                  })
+                    .then(response => response.json())
+                    .then(data => {
+                      console.log('Success:', data);
+                    });
+                });
+
+                // Clear users from realtime database
                 set(ref(db, 'app/users'), {});
                 setConfirm(false);
               }}

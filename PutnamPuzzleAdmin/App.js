@@ -58,6 +58,7 @@ const app = initializeApp(firebaseConfig);
 const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
+  const [questNo, setQuestNo] = useState('');
   const [currentAppState, setCurrentAppState] = useState('Inacvitve');
   const [code, setCode] = useState('');
   const [userCode, setUserCode] = useState('');
@@ -81,6 +82,7 @@ const App: () => Node = () => {
     const dbRef = ref(db, 'app');
     onValue(dbRef, snapshot => {
       const data = snapshot.val();
+      setQuestNo(data.questId);
       setCurrentAppState(data.currentState);
       setHintCooldown(data.hint.cooldown);
       setCode(data.code.value);
@@ -113,6 +115,8 @@ const App: () => Node = () => {
   return (
     <AppContext.Provider
       value={{
+        questNo,
+        setQuestNo,
         currentAppState,
         setCurrentAppState,
         code,

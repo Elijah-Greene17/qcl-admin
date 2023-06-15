@@ -29,6 +29,7 @@ const A1StartPage = ({navigation, route}) => {
   const [approvedPlayers, setApprovedPlayers] = useState({});
   //const { data } = route.params ? route.params : 2000;
   const {
+    questNo,
     currentAppState,
     setCurrentAppState,
     hintCooldown,
