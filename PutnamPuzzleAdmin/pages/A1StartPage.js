@@ -97,6 +97,22 @@ const A1StartPage = ({navigation, route}) => {
             endTime: later,
           };
           set(ref(db, 'app/timer'), laterDbObj);
+          fetch('https://qcq-dd80551a4b64.herokuapp.com/api/startTimer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              endTime: later,
+            }),
+          })
+            .then(response => response.json())
+            .then(json => {
+              console.log(json);
+            })
+            .catch(error => {
+              console.error(error);
+            });
 
           // Update users in database
           const usersDbObj = {};

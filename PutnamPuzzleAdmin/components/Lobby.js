@@ -90,31 +90,30 @@ const Quester = ({name, number, onCheck, onUncheck, selected}) => {
   const questerStyle = {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 16,
+    justifyContent: 'flex-start',
     paddingRight: 16,
     paddingBottom: 10,
   };
 
   const questerText = {
     fontSize: 20,
-    marginRight: 20,
+    marginLeft: 20,
   };
 
   return (
     <View style={questerStyle}>
+      <CustomCheckbox
+        handleCheck={() => {
+          setIsSelected(true);
+        }}
+        handleUncheck={() => {
+          setIsSelected(false);
+        }}
+        checked={selected}
+      />
       <Text style={questerText}>{name}</Text>
       <View style={questerStyle}>
         <Text style={questerText}>{number}</Text>
-        <CustomCheckbox
-          handleCheck={() => {
-            setIsSelected(true);
-          }}
-          handleUncheck={() => {
-            setIsSelected(false);
-          }}
-          checked={selected}
-        />
       </View>
     </View>
   );

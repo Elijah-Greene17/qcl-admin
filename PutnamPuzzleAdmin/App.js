@@ -165,7 +165,8 @@ const App: () => Node = () => {
         {currentAppState == 'Uninitiated' && <A0HomePage />}
         {currentAppState == 'Inactive' && <A1StartPage />}
         {currentAppState == 'Set Timer' && <A2SetTimer />}
-        {currentAppState == 'Active In Progress' && <A3QuestPage />}
+        {(currentAppState == 'Active In Progress' ||
+          currentAppState == 'Review') && <A3QuestPage />}
         {currentAppState == 'Active Game Over' && 'error'}
       </SafeAreaView>
     </AppContext.Provider>
